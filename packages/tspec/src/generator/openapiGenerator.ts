@@ -108,7 +108,8 @@ export const getOpenapiPaths = (
     const queryParams = getObjectPropertyByPath(spec, 'query', openapiSchemas) as any;
     const headerParams = getObjectPropertyByPath(spec, 'header', openapiSchemas) as any;
     const cookieParams = getObjectPropertyByPath(spec, 'cookie', openapiSchemas) as any;
-    const bodyParams = getObjectPropertyByPath(spec, 'body', openapiSchemas) as any;
+
+    const { mediaType = '', ...bodyParams } = getObjectPropertyByPath(spec, 'body', openapiSchemas) as any;
 
     const operation = {
       operationId: `${controllerName}_${method}_${path}`,
@@ -126,7 +127,7 @@ export const getOpenapiPaths = (
         description: bodyParams.description,
         required: true,
         content: {
-          [bodyParams?.mediaType || 'application/json']: {
+          [mediaType || 'application/json']: {
             schema: bodyParams,
           },
         },

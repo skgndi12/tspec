@@ -156,19 +156,10 @@ const getOpenapiSchemasOnly = (openapiSchemas: SchemaMapping, tspecSymbols: stri
     });
   });
 
-  const isTspecSchema = (key: string) => (
-    tspecSymbols.includes(key) || tspecPathSchemas.includes(key)
-  )
-
-  const omitPathSchemaFields = (schema: OpenAPIV3.SchemaObject & { mediaType?: string }) => {
-    const { mediaType, ...rest } = schema;
-    return rest;
-  }
-
   return Object.fromEntries(
-    Object.entries(openapiSchemas)
-      .filter(([key]) => !isTspecSchema(key))
-      .map(([key, value]) => [key, omitPathSchemaFields(value)]),
+    Object.entries(openapiSchemas).filter(
+      ([key]) => (!tspecSymbols.includes(key) && !tspecPathSchemas.includes(key)),
+    ),
   );
 };
 
